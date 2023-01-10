@@ -7,21 +7,21 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
-import { Category } from '../../models/Category';
+import { Ingredient } from '../../models/Ingredient';
 
 type Props = {
-    categories: Category[]
+    ingredients: Ingredient[]
 }
 
-const CategoryList: React.FC<Props> = ({ categories }: { categories: Category[] }) => {
-    const categorieRows = categories.map((category: Category, index: number) => {
+const IngredientList: React.FC<Props> = (props) => {
+    const ingredientRows = props.ingredients.map((ingredient: Ingredient, index: number) => {
         return (
             <TableRow
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
                 <TableCell component="th" scope="row">
-                    {category.name}
+                    {ingredient.name}
                 </TableCell>
                 <TableCell >
                     <EditIcon />
@@ -40,11 +40,11 @@ const CategoryList: React.FC<Props> = ({ categories }: { categories: Category[] 
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {categorieRows}
+                    {ingredientRows}
                 </TableBody>
             </Table>
         </TableContainer>
     );
 }
 
-export default CategoryList;
+export default IngredientList;
