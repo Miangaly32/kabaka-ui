@@ -5,6 +5,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import * as React from 'react';
 import { Ingredient } from "../models/Ingredient";
+import axios from 'axios';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -16,13 +17,22 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-const ingredients: Ingredient[] = [
-    { 'name': 'Haricot vert', 'category': { 'name': 'Legume' } },
-    { 'name': 'Porc', 'category': { 'name': 'Viande' } }
-];
 
 export default function Ingredients() {
     const [open, setOpen] = React.useState(false);
+    const [ingredients, setIngredients] = React.useState([]);
+
+    React.useEffect(() => {
+        axios
+            .get('https://localhost:7274/Ingredients', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+                }
+            })
+            .then(response => {
+                setIngredients(response.data)
+            });
+    }, []);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 

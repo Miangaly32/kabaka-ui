@@ -6,7 +6,7 @@ function HomePage() {
     <Layout>
       <Container>
         <Grid container spacing={2} sx={{ marginTop: 3 }}>
-          <Grid xs={4}>
+          <Grid item xs={4}>
             <Typography variant="h5">KABAKA qu’est ce que c’est ?</Typography>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,
               sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -21,7 +21,7 @@ function HomePage() {
               <Button>S'inscrire</Button>
             </Box>
           </Grid>
-          <Grid xs={8}>
+          <Grid item xs={8}>
           </Grid>
         </Grid>
       </Container>

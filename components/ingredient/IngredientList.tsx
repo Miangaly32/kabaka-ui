@@ -8,13 +8,12 @@ import Paper from '@mui/material/Paper';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import { Ingredient } from '../../models/Ingredient';
+import { useEffect } from 'react';
 
-type Props = {
-    ingredients: Ingredient[]
-}
+const IngredientList = ({ ingredients }: { ingredients: Ingredient[] }) => {
+   
 
-const IngredientList: React.FC<Props> = (props) => {
-    const ingredientRows = props.ingredients.map((ingredient: Ingredient, index: number) => {
+    const ingredientRows = ingredients.map((ingredient: Ingredient, index: number) => {
         return (
             <TableRow
                 key={index}

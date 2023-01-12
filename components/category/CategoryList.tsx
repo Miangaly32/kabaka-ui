@@ -9,11 +9,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import { Category } from '../../models/Category';
 
-type Props = {
-    categories: Category[]
-}
-
-const CategoryList: React.FC<Props> = ({ categories }: { categories: Category[] }) => {
+const CategoryList = ({ categories }: { categories: Category[] }) => {
     const categorieRows = categories.map((category: Category, index: number) => {
         return (
             <TableRow
