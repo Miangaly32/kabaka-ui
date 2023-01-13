@@ -1,11 +1,13 @@
 import { IngredientList, Layout } from "../components";
 import {
-    Modal, Button, Container, Typography, Box, FormControl, InputLabel, Input, FormGroup
+    Modal, Button, Container, Typography, Box, FormControl, InputLabel, Input, FormGroup,
+    Select, MenuItem, SelectChangeEvent
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import * as React from 'react';
-import { Ingredient } from "../models/Ingredient";
 import axios from 'axios';
+import { Category } from "../models/Category";
+import { Ingredient } from "../models/Ingredient";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -20,21 +22,70 @@ const style = {
 
 export default function Ingredients() {
     const [open, setOpen] = React.useState(false);
-    const [ingredients, setIngredients] = React.useState([]);
+    const [nameValue, setNameValue] = React.useState<string>('');
+    const [category, setCategory] = React.useState<string>('');
+    const [categoryId, setCategoryId] = React.useState<string>('');
+    const [ingredients, setIngredients] = React.useState<Array<Ingredient>>([]);
+    const [categories, setCategories] = React.useState<Array<Category>>([]);
+
+    const headers = {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+        }
+    }
 
     React.useEffect(() => {
         axios
-            .get('https://localhost:7274/Ingredients', {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-                }
-            })
+            .get('https://localhost:7274/Ingredients', headers)
             .then(response => {
-                setIngredients(response.data)
+                setIngredients(response.data);
             });
+
+        axios
+            .get('https://localhost:7274/Categories', headers)
+            .then(response => {
+                setCategories(response.data);
+            });
+
+        return () => {
+            setIngredients([])
+            setCategories([])
+        }
     }, []);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const validate = () => {
+        const newIngredient = {
+            "name": nameValue,
+            "colorId": 2,
+            "categoryId": categoryId
+        };
+
+        axios
+            .post(
+                'https://localhost:7274/Ingredients',
+                newIngredient,
+                headers,
+            )
+            .then(response => {
+                if (response.status === 201) {
+                    setNameValue('')
+                    setCategory('')
+                    setIngredients([...ingredients, response.data])
+                    setOpen(false);
+                }
+            });
+    }
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNameValue(event.target.value);
+    }
+
+    const handleCategoryChange = (event: SelectChangeEvent) => {
+        setCategoryId(event.target.value);
+        setCategory(event.target.value as string);
+    }
 
     return (
         <Layout>
@@ -51,10 +102,26 @@ export default function Ingredients() {
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             Ajouter un ingredient
                         </Typography>
-                        <FormGroup>
+                        <FormGroup sx={{ mt: 1 }}>
                             <FormControl>
-                                <InputLabel htmlFor="my-input">Nom</InputLabel>
-                                <Input id="my-input" aria-describedby="my-helper-text" />
+                                <InputLabel htmlFor="name" >Nom</InputLabel>
+                                <Input id="name" value={nameValue} onChange={handleChange} aria-describedby="my-helper-text" />
+                            </FormControl>
+                        </FormGroup>
+                        <FormGroup sx={{ mt: 1 }}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Categorie</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={category}
+                                    label="Categorie"
+                                    onChange={handleCategoryChange}
+                                >
+                                    {
+                                        categories.map((cat: Category) => <MenuItem key={cat.id} value={cat.id} name={cat.name} >{cat.name}</MenuItem>)
+                                    }
+                                </Select>
                             </FormControl>
                         </FormGroup>
                         <Box
@@ -62,7 +129,7 @@ export default function Ingredients() {
                             display="flex"
                             justifyContent="right"
                         >
-                            <Button>Valider</Button>
+                            <Button onClick={validate}>Valider</Button>
                         </Box>
                     </Box>
                 </Modal>

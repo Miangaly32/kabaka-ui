@@ -1,32 +1,39 @@
 import { MealList, Layout } from "../components";
 import {
-    Button, Container, Typography, Box, FormControl, InputLabel, Input, FormGroup
+    Button, Container, Typography
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import Link from "next/link";
 import * as React from 'react';
-
-const meals: Meal[] = [
-    {
-        'name': 'Porc et haricot vert',
-        'description': 'Etape 1: decouper les haricot verts',
-    },
-    {
-        'name': 'Porc et haricot vert',
-        'description': 'Etape 1: decouper les haricot verts',
-    }
-];
+import axios from 'axios';
+import { Meal } from "../models/Meal";
 
 export default function Meals() {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [meals, setMeals] = React.useState<Array<Meal>>([]);
+
+    React.useEffect(() => {
+        const headers = {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+            }
+        }
+
+        axios
+            .get('https://localhost:7274/Meals', headers)
+            .then(response => {
+                setMeals(response.data);
+            });
+
+        
+    }, []);
 
     return (
         <Layout>
             <Container sx={{ my: 2 }}>
                 <Typography variant="h5">Gestion des plats</Typography>
-                <Button onClick={handleOpen} startIcon={<AddIcon />}> Ajouter </Button>
-
+                <Link href="/meal">
+                    <Button startIcon={<AddIcon />}> Ajouter </Button>
+                </Link>
                 <MealList meals={meals} />
             </Container>
         </Layout>

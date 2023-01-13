@@ -8,11 +8,8 @@ import Paper from '@mui/material/Paper';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import { Ingredient } from '../../models/Ingredient';
-import { useEffect } from 'react';
 
 const IngredientList = ({ ingredients }: { ingredients: Ingredient[] }) => {
-   
-
     const ingredientRows = ingredients.map((ingredient: Ingredient, index: number) => {
         return (
             <TableRow
@@ -29,6 +26,7 @@ const IngredientList = ({ ingredients }: { ingredients: Ingredient[] }) => {
             </TableRow>
         );
     });
+
     return (
         <TableContainer component={Paper} sx={{ mt: 1 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">

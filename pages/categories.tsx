@@ -5,6 +5,7 @@ import { CategoryList, Layout } from "../components";
 import * as React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { Category } from "../models/Category";
+import axios from 'axios';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -16,12 +17,29 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-const categories: Category[] = [{ 'name': 'Legume' }, { 'name': 'Viande' }];
-
 export default function Categories() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [categories, setCategories] = React.useState<Array<Category>>([]);
+
+    React.useEffect(() => {
+        const headers = {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+            }
+        }
+
+        axios
+            .get('https://localhost:7274/Categories', headers)
+            .then(response => {
+                setCategories(response.data);
+            });
+
+        return () => {
+            setCategories([])
+        }
+    }, []);
 
     return (
         <Layout>
