@@ -1,4 +1,8 @@
+import { Unit } from './Unit';
+
 export interface Ingredient {
     id: number
-    name: string;
+    name: string
+    quantity?: number
+    unit?: Unit
 }

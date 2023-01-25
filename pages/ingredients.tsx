@@ -24,17 +24,16 @@ export default function Ingredients() {
     const [open, setOpen] = React.useState(false);
     const [nameValue, setNameValue] = React.useState<string>('');
     const [category, setCategory] = React.useState<string>('');
-    const [categoryId, setCategoryId] = React.useState<string>('');
     const [ingredients, setIngredients] = React.useState<Array<Ingredient>>([]);
     const [categories, setCategories] = React.useState<Array<Category>>([]);
 
-    const headers = {
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-        }
-    }
-
     React.useEffect(() => {
+        const headers = {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+            }
+        }
+
         axios
             .get('https://localhost:7274/Ingredients', headers)
             .then(response => {
@@ -52,6 +51,7 @@ export default function Ingredients() {
             setCategories([])
         }
     }, []);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -59,8 +59,13 @@ export default function Ingredients() {
         const newIngredient = {
             "name": nameValue,
             "colorId": 2,
-            "categoryId": categoryId
+            "categoryId": category
         };
+        const headers = {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+            }
+        }
 
         axios
             .post(
@@ -83,7 +88,6 @@ export default function Ingredients() {
     }
 
     const handleCategoryChange = (event: SelectChangeEvent) => {
-        setCategoryId(event.target.value);
         setCategory(event.target.value as string);
     }
 
@@ -119,7 +123,7 @@ export default function Ingredients() {
                                     onChange={handleCategoryChange}
                                 >
                                     {
-                                        categories.map((cat: Category) => <MenuItem key={cat.id} value={cat.id} name={cat.name} >{cat.name}</MenuItem>)
+                                        categories.map((cat: Category) => <MenuItem key={cat.id} value={cat.id} >{cat.name}</MenuItem>)
                                     }
                                 </Select>
                             </FormControl>

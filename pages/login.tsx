@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from "next/router";
 import axios from 'axios';
+import Router from 'next/router'
 
 const theme = createTheme();
 
@@ -30,6 +31,7 @@ export default function Login() {
             })
             .then(response => {
                 localStorage.setItem('TOKEN', response.data.token)
+                Router.push('/')
             });
     };
 
